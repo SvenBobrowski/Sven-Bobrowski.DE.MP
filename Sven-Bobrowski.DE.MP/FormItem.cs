@@ -141,6 +141,13 @@ namespace Sven_Bobrowski.DE.MP
 
         }
 
+        private int TryGetDCC(int pColum, DataRowView pView)
+        {
+            int tDCC = 0;
+            int.TryParse(pView["DCC" + Convert.ToString(pColum)].ToString(), out tDCC);
+            return tDCC;
+        }
+
         private void ApplyValues()
         {
             int tPoint = 0;
@@ -149,11 +156,12 @@ namespace Sven_Bobrowski.DE.MP
             if (cbxState.SelectedIndex >= 0)
                 FItem.State = (PointState)cbxState.SelectedIndex;
             FItem.Notes = memNotes.Text;
-            // DCC adresses
-            dataAdressesBindingSource.MoveFirst();
-
-
-
+            
+            DataRowView tDCCItems = (DataRowView)this.dataAdressesBindingSource.List[0];
+            FItem.DCCAdress1 = TryGetDCC(1, tDCCItems);
+            FItem.DCCAdress2 = TryGetDCC(2, tDCCItems);
+            FItem.DCCAdress3 = TryGetDCC(3, tDCCItems);
+            FItem.DCCAdress4 = TryGetDCC(4, tDCCItems);
         }
 
         private void btOK_Click(object sender, EventArgs e)
@@ -162,6 +170,8 @@ namespace Sven_Bobrowski.DE.MP
             {
                 // apply values
                 ApplyValues();
+                // okay
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
             }
         }
     }
